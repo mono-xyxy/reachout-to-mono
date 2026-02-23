@@ -1,40 +1,17 @@
-name: CI Pipeline
+name: Portfolio CI
 
 on:
   push:
     branches:
       - main
-      - master
-  pull_request:
-    branches:
-      - main
-      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # Setup C++ (if you have C++ code)
-      - name: Set up C++ Build Tools
-        uses: actions/setup-cpp@v1
-
-      - name: Install dependencies
-        run: |
-          # put commands to install dependencies here
-          # e.g., sudo apt install build-essential
-          echo "Install any prerequisites here"
-
-      - name: Build project
-        run: |
-          # put build commands here
-          # Example: mkdir build && cd build && cmake .. && make
-          echo "Build steps here"
-
-      - name: Run tests
-        run: |
-          # put test commands here
-          echo "Test steps here"
+      - name: Done
+        run: echo "Portfolio site ready 🚀"
