@@ -20,9 +20,9 @@
             --dark: #2D3436;
             --light: #F9FAFB;
             --white: #FFFFFF;
-            --glass: rgba(255, 255, 255, 0.8);
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --glass: rgba(255, 255, 255, 0.7);
+            --shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         * {
@@ -31,12 +31,30 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--white);
             color: var(--dark);
-            line-height: 1.6;
+            line-height: 1.7;
             overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* --- Custom Mouse Gradient --- */
+        #bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(116, 185, 255, 0.1) 0%, transparent 50%);
+            transition: background 0.1s ease;
         }
 
         h1,
@@ -45,6 +63,7 @@
         h4 {
             font-family: 'Outfit', sans-serif;
             font-weight: 800;
+            letter-spacing: -0.02em;
         }
 
         a {
@@ -57,50 +76,74 @@
             list-style: none;
         }
 
-        /* --- Animations --- */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+        /* --- Premium Breathing Animations --- */
+        @keyframes breathing {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.8;
             }
 
-            to {
+            50% {
+                transform: scale(1.05);
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
         @keyframes float {
-            0% {
-                transform: translateY(0px);
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
             }
 
             50% {
-                transform: translateY(-10px);
-            }
-
-            100% {
-                transform: translateY(0px);
+                transform: translateY(-20px) rotate(2deg);
             }
         }
 
-        @keyframes pulse-glow {
+        @keyframes colorShift {
             0% {
-                box-shadow: 0 0 0 0 rgba(255, 118, 117, 0.4);
+                fill: var(--primary);
             }
 
-            70% {
-                box-shadow: 0 0 0 15px rgba(255, 118, 117, 0);
+            33% {
+                fill: var(--secondary);
+            }
+
+            66% {
+                fill: var(--accent);
             }
 
             100% {
-                box-shadow: 0 0 0 0 rgba(255, 118, 117, 0);
+                fill: var(--primary);
+            }
+        }
+
+        @keyframes circuitPulse {
+
+            0%,
+            100% {
+                stroke-dashoffset: 100;
+                opacity: 0.1;
+            }
+
+            50% {
+                stroke-dashoffset: 0;
+                opacity: 0.5;
             }
         }
 
         .fade-in {
-            animation: fadeIn 1s forwards;
             opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
+        }
+
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* --- Header --- */
@@ -108,49 +151,72 @@
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 20px 5%;
+            padding: 30px 8%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
             background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            transition: var(--transition);
+        }
+
+        header.scrolled {
+            padding: 15px 8%;
+            box-shadow: var(--shadow);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 24px;
+            gap: 12px;
+            font-size: 26px;
             font-weight: 800;
             color: var(--dark);
             font-family: 'Outfit', sans-serif;
         }
 
         .logo-symbol {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 20px;
-            box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);
+            font-size: 22px;
+            box-shadow: 0 8px 20px rgba(255, 118, 117, 0.2);
+            animation: breathing 4s infinite ease-in-out;
         }
 
         nav ul {
             display: flex;
-            gap: 30px;
+            gap: 40px;
         }
 
         nav ul li a {
             font-weight: 600;
-            font-size: 15px;
+            font-size: 16px;
             color: var(--dark);
-            opacity: 0.7;
+            opacity: 0.6;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: var(--transition);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
         }
 
         nav ul li a:hover {
@@ -161,56 +227,43 @@
         .cta-button {
             background: var(--dark);
             color: white;
-            padding: 12px 25px;
-            border-radius: 30px;
+            padding: 14px 32px;
+            border-radius: 35px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 15px;
             border: none;
             cursor: pointer;
             transition: var(--transition);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
 
         .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
             background: var(--primary);
         }
 
         /* --- Hero --- */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 0 10%;
-            background: radial-gradient(circle at 10% 20%, rgba(255, 118, 117, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(116, 185, 255, 0.05) 0%, transparent 40%);
+            padding: 120px 10% 80px;
             position: relative;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image:
-                radial-gradient(var(--dark) 0.5px, transparent 0.5px);
-            background-size: 30px 30px;
-            opacity: 0.05;
-            z-index: -1;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, transparent 100%);
         }
 
         .hero h1 {
-            font-size: clamp(40px, 8vw, 80px);
-            line-height: 1.1;
-            margin-bottom: 20px;
-            background: linear-gradient(to right, var(--dark), #555);
+            font-size: clamp(48px, 10vw, 100px);
+            line-height: 0.95;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--dark) 0%, #636e72 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: float 6s infinite ease-in-out;
         }
 
         .hero p {
@@ -437,12 +490,65 @@
             pointer-events: none;
             z-index: -1;
         }
+
+        /* New styles for mouse-tracking glow */
+        #bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(var(--primary-rgb), 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -2;
+            transition: background 0.1s ease-out;
+        }
+
+        /* Header scroll effect */
+        #main-header {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #main-header.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Breathing animation for SVG */
+        @keyframes breathing {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.03);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <header>
+    <div id="bg-glow"></div>
+
+    <header id="main-header">
         <div class="logo">
             <div class="logo-symbol">m</div>
             <span>mono</span>
@@ -458,58 +564,92 @@
     </header>
 
     <section class="hero">
-        <div class="floating-shape" style="width: 300px; height: 300px; top: 10%; left: 10%;"></div>
+        <div class="floating-shape" style="width: 500px; height: 500px; top: -10%; left: -10%; opacity: 0.1;"></div>
         <div class="floating-shape"
-            style="width: 400px; height: 400px; bottom: 10%; right: 10%; background: var(--secondary);"></div>
-
-        <h1 class="fade-in" style="animation-delay: 0.1s;">Adaptable Web Solutions</h1>
-        <p class="fade-in" style="animation-delay: 0.3s;">Mono is your chameleon in the digital landscape. We help
-            businesses of all sizes build websites that stand out and scale fast.</p>
-        <div class="fade-in" style="animation-delay: 0.5s;">
-            <a href="#features" class="cta-button" style="padding: 15px 40px; font-size: 16px;">Explore Capabilities</a>
+            style="width: 600px; height: 600px; bottom: -10%; right: -10%; background: var(--secondary); opacity: 0.1;">
         </div>
 
-        <!-- SVG Chameleon Placeholder for Logo Vibe -->
-        <div class="fade-in" style="margin-top: 50px; animation-delay: 0.7s;">
-            <svg width="150" height="150" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 60C20 40 40 20 60 20C80 20 90 40 90 60C90 80 70 80 50 80C30 80 20 70 20 60Z"
-                    fill="url(#grad1)" opacity="0.8" />
-                <path
-                    d="M40 40C40 37.2386 42.2386 35 45 35C47.7614 35 50 37.2386 50 40C50 42.7614 47.7614 45 45 45C42.2386 45 40 42.7614 40 40Z"
-                    fill="white" />
-                <path
-                    d="M44 40C44 39.4477 44.4477 39 45 39C45.5523 39 46 39.4477 46 40C46 40.5523 45.5523 41 45 41C44.4477 41 44 40.5523 44 40Z"
-                    fill="black" />
+        <h1 class="fade-in">Adaptable<br>Web Solutions</h1>
+        <p class="fade-in" style="transition-delay: 0.2s;">Mono is your chameleon in the digital landscape. We help
+            businesses of all sizes build websites that stand out and scale fast.</p>
+        <div class="fade-in" style="transition-delay: 0.4s; margin-top: 20px;">
+            <a href="#features" class="cta-button" style="padding: 18px 45px; font-size: 17px;">Explore Capabilities</a>
+        </div>
+
+        <!-- Advanced Chameleon Logo with Breathing Effect -->
+        <div class="fade-in" style="margin-top: 80px; transition-delay: 0.6s; position: relative;">
+            <svg width="280" height="280" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"
+                style="filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));">
+                <!-- Circuit Board Lines (Background) -->
+                <g opacity="0.2">
+                    <path d="M40 100H20" stroke="var(--dark)" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M40 120H25" stroke="var(--dark)" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M160 100H180" stroke="var(--dark)" stroke-width="1.5" stroke-linecap="round" />
+                    <circle cx="20" cy="100" r="3" fill="var(--dark)" />
+                    <circle cx="180" cy="100" r="3" fill="var(--dark)" />
+                </g>
+
+                <!-- Chameleon Body (Geometric) -->
+                <path d="M50 120C50 90 80 60 110 60C140 60 160 80 160 110C160 140 130 150 110 150C90 150 70 140 50 120Z"
+                    fill="url(#hero-grad)" style="animation: breathing 5s infinite ease-in-out;" />
+
+                <!-- Polygon details -->
+                <path d="M60 110L90 80L120 100L90 130Z" fill="white" opacity="0.1" />
+                <path d="M110 70L140 90L130 120L100 100Z" fill="white" opacity="0.1" />
+
+                <!-- Tail Curl -->
+                <path d="M130 140C130 160 150 170 165 155C175 145 155 130 145 145" stroke="var(--dark)" stroke-width="4"
+                    stroke-linecap="round" fill="none" />
+
+                <!-- Head/Helmet -->
+                <path d="M50 120L40 90L70 70L90 80L80 110L50 120Z" fill="#2d3436" />
+
+                <!-- Eye -->
+                <circle cx="60" cy="90" r="8" fill="white" />
+                <circle id="eye-pupil" cx="62" cy="88" r="4" fill="black" />
+
                 <defs>
-                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:var(--primary);stop-opacity:1" />
-                        <stop offset="50%" style="stop-color:var(--secondary);stop-opacity:1" />
-                        <stop offset="100%" style="stop-color:var(--accent);stop-opacity:1" />
+                    <linearGradient id="hero-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:var(--primary); transition: 1s;">
+                            <animate attributeName="stop-color" values="#FF7675;#74B9FF;#FFEAA7;#FF7675" dur="10s"
+                                repeatCount="indefinite" />
+                        </stop>
+                        <stop offset="100%" style="stop-color:var(--secondary); transition: 1s;">
+                            <animate attributeName="stop-color" values="#74B9FF;#FFEAA7;#FF7675;#74B9FF" dur="10s"
+                                repeatCount="indefinite" />
+                        </stop>
                     </linearGradient>
                 </defs>
             </svg>
-            <p style="font-weight: 800; font-family: 'Outfit'; margin-top:-20px; font-size: 24px;">mono</p>
-            <p style="font-size: 10px; letter-spacing: 2px; opacity: 0.6;">YOUR WEB BUILDER</p>
+            <div style="margin-top: -30px;">
+                <p
+                    style="font-weight: 800; font-family: 'Outfit'; font-size: 42px; color: var(--dark); letter-spacing: -2px;">
+                    mono</p>
+                <p
+                    style="font-size: 14px; letter-spacing: 6px; opacity: 0.4; font-weight: 600; text-transform: uppercase;">
+                    Your Web Builder</p>
+            </div>
         </div>
     </section>
 
+    <!-- Content Sections (adding fade-in classes) -->
     <section id="features" class="features">
         <div class="section-header fade-in">
             <h2>Built for every scale.</h2>
             <p>Whether you're a budding startup or an established enterprise, our systems evolve with your needs.</p>
         </div>
         <div class="feature-grid">
-            <div class="feature-card fade-in" style="animation-delay: 0.2s;">
+            <div class="feature-card fade-in" style="transition-delay: 0.1s;">
                 <div class="feature-icon">🧩</div>
                 <h3>Modular Design</h3>
                 <p>Component-based architecture that makes updates and scaling a breeze. No more legacy headaches.</p>
             </div>
-            <div class="feature-card fade-in" style="animation-delay: 0.4s;">
+            <div class="feature-card fade-in" style="transition-delay: 0.2s;">
                 <div class="feature-icon">⚡</div>
                 <h3>High Velocity</h3>
                 <p>Built for speed and SEO. Our websites load in milliseconds, keeping your users engaged and happy.</p>
             </div>
-            <div class="feature-card fade-in" style="animation-delay: 0.6s;">
+            <div class="feature-card fade-in" style="transition-delay: 0.3s;">
                 <div class="feature-icon">🛡️</div>
                 <h3>Enterprise Grade</h3>
                 <p>Security and reliability are at our core. We use the latest standards to protect your digital assets.
@@ -521,38 +661,40 @@
     <section id="tech" class="tech-stack">
         <h2 class="fade-in">Our Tech Stack</h2>
         <div class="tech-grid">
-            <div class="tech-item fade-in" style="animation-delay: 0.1s;">
-                <div class="tech-icon">R</div>
+            <div class="tech-item fade-in" style="transition-delay: 0.1s;">
+                <div class="tech-icon" style="color: #61DAFB;">R</div>
                 <div class="tech-name">React</div>
             </div>
-            <div class="tech-item fade-in" style="animation-delay: 0.2s;">
-                <div class="tech-icon">N</div>
+            <div class="tech-item fade-in" style="transition-delay: 0.2s;">
+                <div class="tech-icon" style="color: #000;">N</div>
                 <div class="tech-name">Next.js</div>
             </div>
-            <div class="tech-item fade-in" style="animation-delay: 0.3s;">
-                <div class="tech-icon">T</div>
+            <div class="tech-item fade-in" style="transition-delay: 0.3s;">
+                <div class="tech-icon" style="color: #3178C6;">T</div>
                 <div class="tech-name">TypeScript</div>
             </div>
-            <div class="tech-item fade-in" style="animation-delay: 0.4s;">
-                <div class="tech-icon">V</div>
+            <div class="tech-item fade-in" style="transition-delay: 0.4s;">
+                <div class="tech-icon" style="color: #646CFF;">V</div>
                 <div class="tech-name">Vite</div>
             </div>
-            <div class="tech-item fade-in" style="animation-delay: 0.5s;">
-                <div class="tech-icon">S</div>
+            <div class="tech-item fade-in" style="transition-delay: 0.5s;">
+                <div class="tech-icon" style="color: #3ECF8E;">S</div>
                 <div class="tech-name">Supabase</div>
             </div>
-            <div class="tech-item fade-in" style="animation-delay: 0.6s;">
-                <div class="tech-icon">F</div>
+            <div class="tech-item fade-in" style="transition-delay: 0.6s;">
+                <div class="tech-icon" style="color: #F002B3;">F</div>
                 <div class="tech-name">Framer Motion</div>
             </div>
         </div>
     </section>
 
     <section class="cta-section fade-in">
-        <h2>Get ur website done today.</h2>
-        <p>Join businesses that trust Mono for their digital transformation. High quality, fast delivery, and scalable
-            code.</p>
-        <a href="mailto:tracoonamailbox@gmail.com" class="contact-cta">Start Your Project</a>
+        <div style="position: relative; z-index: 1;">
+            <h2>Get ur website done today.</h2>
+            <p>Join businesses that trust Mono for their digital transformation. High quality, fast delivery, and
+                scalable code.</p>
+            <a href="mailto:tracoonamailbox@gmail.com" class="contact-cta">Start Your Project</a>
+        </div>
     </section>
 
     <section id="contact" class="contact fade-in">
@@ -564,36 +706,76 @@
     <footer>
         <div class="footer-logo">mono</div>
         <p>&copy; 2026 Mono Web Builder. All rights reserved.</p>
-        <div style="display: flex; gap: 20px;">
+        <div style="display: flex; gap: 30px;">
             <a href="#">Privacy</a>
             <a href="#">Terms</a>
         </div>
     </footer>
 
     <script>
-        // Smooth reveal on scroll
+        // Mouse Following Background Glow
+        const bgGlow = document.getElementById('bg-glow');
+        const pupil = document.getElementById('eye-pupil');
+
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            document.documentElement.style.setProperty('--mouse-x', `${x}%`);
+            document.documentElement.style.setProperty('--mouse-y', `${y}%`);
+
+            // Eye tracking
+            if (pupil) {
+                const rect = pupil.getBoundingClientRect();
+                const pupilX = rect.left + rect.width / 2;
+                const pupilY = rect.top + rect.height / 2;
+                const angle = Math.atan2(e.clientY - pupilY, e.clientX - pupilX);
+                const distance = Math.min(3, Math.hypot(e.clientX - pupilX, e.clientY - pupilY) / 100);
+
+                pupil.setAttribute('cx', 60 + Math.cos(angle) * distance);
+                pupil.setAttribute('cy', 90 + Math.sin(angle) * distance);
+            }
+        });
+
+        // Header Scroll Effect
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for Fade In
         const observerOptions = {
-            threshold: 0.1
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in');
-                    entry.target.style.opacity = '1';
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // Smooth scroll for nav links
+        // Smooth Scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
             });
         });
     </script>
