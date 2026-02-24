@@ -29,8 +29,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Kurale', serif;
-            /* Unified font everywhere */
+            font-family: 'Kurale', serif !important;
+            /* Absolute unification */
         }
 
         html {
@@ -253,17 +253,14 @@
             animation: rollEye 2s infinite ease-in-out;
         }
 
-        .fade-in.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         .brand-text-animated {
-            background: linear-gradient(90deg, var(--dark), var(--primary), var(--secondary), var(--dark));
+            background: linear-gradient(90deg, var(--dark) 0%, var(--primary) 25%, var(--secondary) 50%, var(--primary) 75%, var(--dark) 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 8s linear infinite;
+            animation: shine 6s linear infinite;
+            display: inline-block;
         }
 
         @keyframes shine {
@@ -297,8 +294,8 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 26px;
-            font-weight: 800;
+            font-size: 24px;
+            font-weight: 700;
             color: var(--dark);
         }
 
@@ -800,7 +797,9 @@
 
     <header id="main-header">
         <div class="logo">
-            <div class="logo-symbol">m</div>
+            <div class="logo-symbol"
+                style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #FF7675, #74B9FF, #FFEAA7); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Kurale', serif; font-weight: 800; font-size: 26px;">
+                m</div>
             <div class="logo-text">
                 <span>m</span><span>o</span><span>n</span><span>o</span>
             </div>
@@ -821,30 +820,10 @@
             style="width: 600px; height: 600px; bottom: -10%; right: -10%; background: var(--secondary); opacity: 0.1;">
         </div>
 
-        <h1 class="fade-in">your web<br>solution builder</h1>
-        <p class="fade-in" style="transition-delay: 0.2s;">Mono is your chameleon in the digital landscape. We help
-            businesses of all sizes build websites that stand out and scale fast.</p>
-        <div class="fade-in" style="transition-delay: 0.4s; margin-top: 20px;">
-            <a href="#features" class="cta-button" style="padding: 18px 45px; font-size: 17px;">Explore Capabilities</a>
-        </div>
-
-        <!-- Advanced Chameleon Logo with Crawling and Eye-Rolling -->
-        <div class="fade-in" style="margin-top: 80px; transition-delay: 0.6s; position: relative;">
-            <svg width="320" height="320" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"
+        <!-- Logo Branding Centerpiece -->
+        <div class="fade-in" style="margin-bottom: 40px; text-align: center;">
+            <svg width="220" height="220" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"
                 style="filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));">
-
-                <!-- Circuit Board Lines (Background) -->
-                <g opacity="0.15">
-                    <path d="M30 110C50 110 60 130 80 130" stroke="var(--dark)" stroke-width="1.5"
-                        stroke-linecap="round" />
-                    <path d="M20 130C40 130 50 150 70 150" stroke="var(--dark)" stroke-width="1.5"
-                        stroke-linecap="round" />
-                    <path d="M170 80C180 90 190 110 185 130" stroke="var(--dark)" stroke-width="1.5"
-                        stroke-linecap="round" />
-                    <circle cx="80" cy="130" r="3" fill="var(--dark)" />
-                    <circle cx="70" cy="150" r="3" fill="var(--dark)" />
-                </g>
-
                 <g class="chameleon-crawl">
                     <!-- Legs -->
                     <path class="leg-anim" d="M75 135L65 155M65 155L55 150" stroke="#2d3436" stroke-width="4"
@@ -852,58 +831,48 @@
                     <path class="leg-anim" style="animation-delay: -1s;" d="M110 145L105 165M105 165L95 160"
                         stroke="#2d3436" stroke-width="4" stroke-linecap="round" />
 
-                    <!-- Chameleon Body (Geometric Segments inspired by logo) -->
                     <g style="animation: breathing 5s infinite ease-in-out;">
-                        <!-- Main body segments -->
+                        <!-- Body Segments -->
                         <path
                             d="M50 120C50 90 80 60 115 60C150 60 165 90 165 120C165 145 140 155 115 155C90 155 70 145 50 120Z"
                             fill="url(#hero-grad)" />
+                        <path d="M60 100L90 70L120 90L90 110Z" fill="white" opacity="0.1" />
+                        <path d="M100 75L140 80L145 110L110 105Z" fill="white" opacity="0.1" />
 
-                        <!-- Geometric Overlays -->
-                        <path d="M70 80L100 70L120 90L90 100Z" fill="white" opacity="0.1" />
-                        <path d="M110 70L145 75L150 105L120 100Z" fill="white" opacity="0.1" />
-                        <path d="M80 110L110 105L130 135L90 140Z" fill="black" opacity="0.05" />
-
-                        <!-- Head / Helmet -->
+                        <!-- Head / Eyes -->
                         <path d="M50 120L40 90L75 70L95 85L85 115L50 120Z" fill="#2d3436" />
-                        <path d="M42 95L55 85L65 95Z" fill="white" opacity="0.05" />
-
-                        <!-- Curled Tail -->
-                        <path d="M145 130C145 165 185 165 185 135C185 115 165 115 158 128" stroke="#2d3436"
-                            stroke-width="6" stroke-linecap="round" fill="none" />
-                        <path d="M158 128C155 135 160 142 165 138" stroke="#2d3436" stroke-width="4"
-                            stroke-linecap="round" fill="none" />
-
-                        <!-- Eye Group -->
                         <g>
-                            <circle cx="63" cy="92" r="10" fill="white" />
-                            <circle id="eye-pupil" class="eye-rolling" cx="63" cy="92" r="5" fill="black" />
-                            <circle cx="65" cy="90" r="2" fill="white" opacity="0.8" />
+                            <circle cx="63" cy="92" r="9" fill="white" />
+                            <circle id="eye-pupil" class="eye-rolling" cx="63" cy="92" r="4.5" fill="black" />
                         </g>
+
+                        <!-- Tail -->
+                        <path d="M145 130C145 160 180 160 180 135C180 120 165 120 160 130" stroke="#2d3436"
+                            stroke-width="5" stroke-linecap="round" fill="none" />
                     </g>
                 </g>
-
                 <defs>
                     <linearGradient id="hero-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:var(--primary); transition: 1s;">
-                            <animate attributeName="stop-color" values="#FF7675;#74B9FF;#FFEAA7;#FF7675" dur="10s"
-                                repeatCount="indefinite" />
-                        </stop>
-                        <stop offset="100%" style="stop-color:var(--secondary); transition: 1s;">
-                            <animate attributeName="stop-color" values="#74B9FF;#FFEAA7;#FF7675;#74B9FF" dur="10s"
-                                repeatCount="indefinite" />
-                        </stop>
+                        <stop offset="0%" style="stop-color:var(--primary)" />
+                        <stop offset="100%" style="stop-color:var(--secondary)" />
                     </linearGradient>
                 </defs>
             </svg>
-            <div style="margin-top: -30px;">
-                <p class="brand-text-animated"
-                    style="font-weight: 800; font-size: 52px; color: var(--dark); letter-spacing: -2px; margin-bottom: 0;">
-                    mono</p>
+            <div style="margin-top: -20px;">
+                <p class="brand-text-animated" style="font-size: 56px; font-weight: 800; letter-spacing: -2px;">mono</p>
                 <p
-                    style="font-size: 14px; letter-spacing: 6px; opacity: 0.4; font-weight: 600; text-transform: uppercase;">
-                    Your Web Builder</p>
+                    style="font-size: 14px; letter-spacing: 5px; opacity: 0.4; font-weight: 600; text-transform: uppercase;">
+                    YOUR WEB BUILDER</p>
             </div>
+        </div>
+
+        <h1 class="fade-in" style="font-size: clamp(32px, 6vw, 64px); transition-delay: 0.2s;">your web solution builder
+        </h1>
+        <p class="fade-in" style="transition-delay: 0.4s; margin-top: 15px;">Mono is your chameleon in the digital
+            landscape. We help
+            businesses build websites that stand out and scale fast.</p>
+        <div class="fade-in" style="transition-delay: 0.6s; margin-top: 30px;">
+            <a href="#features" class="cta-button">Explore Capabilities</a>
         </div>
     </section>
 
@@ -1052,11 +1021,18 @@
             }
 
             // Disco background shift based on scroll
-            const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (window.scrollY / totalScroll) * 100;
+
             if (bgSlide) {
-                bgSlide.style.backgroundPosition = `${scrollPercent}% 50%`;
-                // Shift hue based on scroll for extra 'disco' effect
-                bgSlide.style.filter = `hue-rotate(${window.scrollY * 0.1}deg)`;
+                // Sync position with scroll
+                bgSlide.style.backgroundPosition = `${scrollPercent}% ${scrollPercent}%`;
+                // Dramatically shift hue based on scroll for 'chameleon skin' effect
+                // Shifting 360 degrees over the full scroll height
+                const hue = (window.scrollY / totalScroll) * 360;
+                bgSlide.style.filter = `hue-rotate(${hue}deg) saturate(1.5)`;
+                // Slightly increase opacity as you scroll deeper
+                bgSlide.style.opacity = 0.15 + (scrollPercent / 1000);
             }
         });
 
