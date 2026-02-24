@@ -72,8 +72,9 @@
                     #FF8A8A, #8AB4FF, #FFEB8A, #8AFFD4, #C88AFF, #FF8A8A);
             background-size: 600% 600%;
             animation: discoBG 15s linear infinite;
-            opacity: 0.12;
-            /* Matte subtleness */
+            opacity: 0;
+            /* Initially hidden (White) */
+            transition: opacity 1s ease;
         }
 
         @keyframes discoBG {
@@ -98,10 +99,21 @@
             width: 100%;
             height: 100%;
             z-index: -2;
-            opacity: 0.04;
+            opacity: 0;
+            /* Initially hidden */
             pointer-events: none;
             background-image: radial-gradient(var(--dark) 1px, transparent 1px);
             background-size: 20px 20px;
+            transition: opacity 1s ease;
+        }
+
+        /* Reveal background on hover */
+        body:hover #bg-slide {
+            opacity: 0.12;
+        }
+
+        body:hover #bg-pattern {
+            opacity: 0.04;
         }
 
         /* --- Custom Mouse Gradient --- */
@@ -973,7 +985,6 @@
                 bgSlide.style.backgroundPosition = `${scrollPercent}% ${scrollPercent}%`;
                 const hue = (window.scrollY / totalScroll) * 360;
                 bgSlide.style.filter = `hue-rotate(${hue}deg) saturate(1.2)`;
-                bgSlide.style.opacity = 0.12 + (scrollPercent / 1000);
 
 
                 // Dynamically update nav link colors based on scroll
