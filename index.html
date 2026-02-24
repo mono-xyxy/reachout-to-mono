@@ -10,8 +10,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         :root {
             --primary: #FF7675;
@@ -36,7 +38,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--white);
             color: var(--dark);
             line-height: 1.7;
@@ -61,9 +63,10 @@
         h2,
         h3,
         h4 {
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Syne', sans-serif;
             font-weight: 800;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.04em;
+            text-transform: lowercase;
         }
 
         a {
@@ -133,6 +136,36 @@
                 stroke-dashoffset: 0;
                 opacity: 0.5;
             }
+        }
+
+        @keyframes rollEye {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            20% {
+                transform: translate(3px, -2px);
+            }
+
+            40% {
+                transform: translate(-3px, 2px);
+            }
+
+            60% {
+                transform: translate(2px, 3px);
+            }
+
+            80% {
+                transform: translate(-2px, -3px);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        .eye-rolling {
+            animation: rollEye 2s infinite ease-in-out;
         }
 
         .fade-in {
@@ -606,7 +639,7 @@
 
     <header id="main-header">
         <div class="logo">
-            <div class="logo-symbol">m</div>
+            <div class="logo-symbol" style="font-family: 'Syne', sans-serif;">m</div>
             <span>mono</span>
         </div>
         <nav>
@@ -662,7 +695,7 @@
 
                 <!-- Eye -->
                 <circle cx="60" cy="90" r="8" fill="white" />
-                <circle id="eye-pupil" cx="62" cy="88" r="4" fill="black" />
+                <circle id="eye-pupil" class="eye-rolling" cx="62" cy="88" r="4" fill="black" />
 
                 <defs>
                     <linearGradient id="hero-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -696,17 +729,17 @@
         </div>
         <div class="feature-grid">
             <div class="feature-card fade-in" style="transition-delay: 0.1s;">
-                <div class="feature-icon">🧩</div>
+                <div class="feature-icon"><i class="ph-fill ph-circles-three-plus"></i></div>
                 <h3>Modular Design</h3>
                 <p>Component-based architecture that makes updates and scaling a breeze. No more legacy headaches.</p>
             </div>
             <div class="feature-card fade-in" style="transition-delay: 0.2s;">
-                <div class="feature-icon">⚡</div>
+                <div class="feature-icon"><i class="ph-fill ph-rocket"></i></div>
                 <h3>High Velocity</h3>
                 <p>Built for speed and SEO. Our websites load in milliseconds, keeping your users engaged and happy.</p>
             </div>
             <div class="feature-card fade-in" style="transition-delay: 0.3s;">
-                <div class="feature-icon">🛡️</div>
+                <div class="feature-icon"><i class="ph-fill ph-shield-check"></i></div>
                 <h3>Enterprise Grade</h3>
                 <p>Security and reliability are at our core. We use the latest standards to protect your digital assets.
                 </p>
@@ -718,27 +751,27 @@
         <h2 class="fade-in">Our Tech Stack</h2>
         <div class="tech-grid">
             <div class="tech-item fade-in" style="transition-delay: 0.1s;">
-                <div class="tech-icon" style="color: #61DAFB;">R</div>
+                <div class="tech-icon"><i class="ph-bold ph-atom" style="color: #61DAFB;"></i></div>
                 <div class="tech-name">React</div>
             </div>
             <div class="tech-item fade-in" style="transition-delay: 0.2s;">
-                <div class="tech-icon" style="color: #000;">N</div>
+                <div class="tech-icon"><i class="ph-bold ph-lightning" style="color: #000;"></i></div>
                 <div class="tech-name">Next.js</div>
             </div>
             <div class="tech-item fade-in" style="transition-delay: 0.3s;">
-                <div class="tech-icon" style="color: #3178C6;">T</div>
+                <div class="tech-icon"><i class="ph-bold ph-code" style="color: #3178C6;"></i></div>
                 <div class="tech-name">TypeScript</div>
             </div>
             <div class="tech-item fade-in" style="transition-delay: 0.4s;">
-                <div class="tech-icon" style="color: #646CFF;">V</div>
+                <div class="tech-icon"><i class="ph-bold ph-vibrate" style="color: #646CFF;"></i></div>
                 <div class="tech-name">Vite</div>
             </div>
             <div class="tech-item fade-in" style="transition-delay: 0.5s;">
-                <div class="tech-icon" style="color: #3ECF8E;">S</div>
+                <div class="tech-icon"><i class="ph-bold ph-database" style="color: #3ECF8E;"></i></div>
                 <div class="tech-name">Supabase</div>
             </div>
             <div class="tech-item fade-in" style="transition-delay: 0.6s;">
-                <div class="tech-icon" style="color: #F002B3;">F</div>
+                <div class="tech-icon"><i class="ph-bold ph-wind" style="color: #F002B3;"></i></div>
                 <div class="tech-name">Framer Motion</div>
             </div>
         </div>
@@ -757,15 +790,15 @@
         <h2>find mono social handles here</h2>
         <div class="social-grid">
             <a href="https://www.linkedin.com/company/mono-xyxy" target="_blank" class="social-link">
-                <span class="social-icon">Li</span>
+                <span class="social-icon"><i class="ph-bold ph-linkedin-logo"></i></span>
                 <span class="social-name">LinkedIn</span>
             </a>
             <a href="https://facebook.com/mono-xyxy" target="_blank" class="social-link">
-                <span class="social-icon">Fb</span>
+                <span class="social-icon"><i class="ph-bold ph-facebook-logo"></i></span>
                 <span class="social-name">Facebook</span>
             </a>
             <a href="https://www.instagram.com/mono_xyxy" target="_blank" class="social-link">
-                <span class="social-icon">Ig</span>
+                <span class="social-icon"><i class="ph-bold ph-instagram-logo"></i></span>
                 <span class="social-name">Instagram</span>
             </a>
         </div>
@@ -790,6 +823,7 @@
         // Mouse Following Background Glow
         const bgGlow = document.getElementById('bg-glow');
         const pupil = document.getElementById('eye-pupil');
+        let eyeTimeout;
 
         document.addEventListener('mousemove', (e) => {
             const x = (e.clientX / window.innerWidth) * 100;
@@ -799,14 +833,23 @@
 
             // Eye tracking
             if (pupil) {
+                // Pause rolling animation when tracking mouse
+                pupil.classList.remove('eye-rolling');
+                clearTimeout(eyeTimeout);
+
                 const rect = pupil.getBoundingClientRect();
                 const pupilX = rect.left + rect.width / 2;
                 const pupilY = rect.top + rect.height / 2;
                 const angle = Math.atan2(e.clientY - pupilY, e.clientX - pupilX);
                 const distance = Math.min(3, Math.hypot(e.clientX - pupilX, e.clientY - pupilY) / 100);
 
-                pupil.setAttribute('cx', 60 + Math.cos(angle) * distance);
-                pupil.setAttribute('cy', 90 + Math.sin(angle) * distance);
+                pupil.style.transform = `translate(${Math.cos(angle) * distance * 2}px, ${Math.sin(angle) * distance * 2}px)`;
+
+                // Resume rolling after 1s of stillness
+                eyeTimeout = setTimeout(() => {
+                    pupil.classList.add('eye-rolling');
+                    pupil.style.transform = '';
+                }, 1000);
             }
         });
 
