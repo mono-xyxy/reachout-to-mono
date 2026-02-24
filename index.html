@@ -173,6 +173,47 @@
             }
         }
 
+        @keyframes crawl {
+
+            0%,
+            100% {
+                transform: translateX(0) translateY(0);
+            }
+
+            25% {
+                transform: translateX(5px) translateY(-2px);
+            }
+
+            50% {
+                transform: translateX(0) translateY(0);
+            }
+
+            75% {
+                transform: translateX(-5px) translateY(-2px);
+            }
+        }
+
+        @keyframes legMovement {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(15deg);
+            }
+        }
+
+        .chameleon-crawl {
+            animation: crawl 4s infinite ease-in-out;
+        }
+
+        .leg-anim {
+            transform-origin: top center;
+            animation: legMovement 2s infinite ease-in-out;
+        }
+
         @keyframes rollEye {
             0% {
                 transform: translate(0, 0);
@@ -710,37 +751,60 @@
             <a href="#features" class="cta-button" style="padding: 18px 45px; font-size: 17px;">Explore Capabilities</a>
         </div>
 
-        <!-- Advanced Chameleon Logo with Breathing Effect -->
+        <!-- Advanced Chameleon Logo with Crawling and Eye-Rolling -->
         <div class="fade-in" style="margin-top: 80px; transition-delay: 0.6s; position: relative;">
-            <svg width="280" height="280" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"
+            <svg width="320" height="320" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"
                 style="filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));">
+
                 <!-- Circuit Board Lines (Background) -->
-                <g opacity="0.2">
-                    <path d="M40 100H20" stroke="var(--dark)" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M40 120H25" stroke="var(--dark)" stroke-width="1.5" stroke-linecap="round" />
-                    <path d="M160 100H180" stroke="var(--dark)" stroke-width="1.5" stroke-linecap="round" />
-                    <circle cx="20" cy="100" r="3" fill="var(--dark)" />
-                    <circle cx="180" cy="100" r="3" fill="var(--dark)" />
+                <g opacity="0.15">
+                    <path d="M30 110C50 110 60 130 80 130" stroke="var(--dark)" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <path d="M20 130C40 130 50 150 70 150" stroke="var(--dark)" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <path d="M170 80C180 90 190 110 185 130" stroke="var(--dark)" stroke-width="1.5"
+                        stroke-linecap="round" />
+                    <circle cx="80" cy="130" r="3" fill="var(--dark)" />
+                    <circle cx="70" cy="150" r="3" fill="var(--dark)" />
                 </g>
 
-                <!-- Chameleon Body (Geometric) -->
-                <path d="M50 120C50 90 80 60 110 60C140 60 160 80 160 110C160 140 130 150 110 150C90 150 70 140 50 120Z"
-                    fill="url(#hero-grad)" style="animation: breathing 5s infinite ease-in-out;" />
+                <g class="chameleon-crawl">
+                    <!-- Legs -->
+                    <path class="leg-anim" d="M75 135L65 155M65 155L55 150" stroke="#2d3436" stroke-width="4"
+                        stroke-linecap="round" />
+                    <path class="leg-anim" style="animation-delay: -1s;" d="M110 145L105 165M105 165L95 160"
+                        stroke="#2d3436" stroke-width="4" stroke-linecap="round" />
 
-                <!-- Polygon details -->
-                <path d="M60 110L90 80L120 100L90 130Z" fill="white" opacity="0.1" />
-                <path d="M110 70L140 90L130 120L100 100Z" fill="white" opacity="0.1" />
+                    <!-- Chameleon Body (Geometric Segments inspired by logo) -->
+                    <g style="animation: breathing 5s infinite ease-in-out;">
+                        <!-- Main body segments -->
+                        <path
+                            d="M50 120C50 90 80 60 115 60C150 60 165 90 165 120C165 145 140 155 115 155C90 155 70 145 50 120Z"
+                            fill="url(#hero-grad)" />
 
-                <!-- Tail Curl -->
-                <path d="M130 140C130 160 150 170 165 155C175 145 155 130 145 145" stroke="var(--dark)" stroke-width="4"
-                    stroke-linecap="round" fill="none" />
+                        <!-- Geometric Overlays -->
+                        <path d="M70 80L100 70L120 90L90 100Z" fill="white" opacity="0.1" />
+                        <path d="M110 70L145 75L150 105L120 100Z" fill="white" opacity="0.1" />
+                        <path d="M80 110L110 105L130 135L90 140Z" fill="black" opacity="0.05" />
 
-                <!-- Head/Helmet -->
-                <path d="M50 120L40 90L70 70L90 80L80 110L50 120Z" fill="#2d3436" />
+                        <!-- Head / Helmet -->
+                        <path d="M50 120L40 90L75 70L95 85L85 115L50 120Z" fill="#2d3436" />
+                        <path d="M42 95L55 85L65 95Z" fill="white" opacity="0.05" />
 
-                <!-- Eye -->
-                <circle cx="60" cy="90" r="8" fill="white" />
-                <circle id="eye-pupil" class="eye-rolling" cx="62" cy="88" r="4" fill="black" />
+                        <!-- Curled Tail -->
+                        <path d="M145 130C145 165 185 165 185 135C185 115 165 115 158 128" stroke="#2d3436"
+                            stroke-width="6" stroke-linecap="round" fill="none" />
+                        <path d="M158 128C155 135 160 142 165 138" stroke="#2d3436" stroke-width="4"
+                            stroke-linecap="round" fill="none" />
+
+                        <!-- Eye Group -->
+                        <g>
+                            <circle cx="63" cy="92" r="10" fill="white" />
+                            <circle id="eye-pupil" class="eye-rolling" cx="63" cy="92" r="5" fill="black" />
+                            <circle cx="65" cy="90" r="2" fill="white" opacity="0.8" />
+                        </g>
+                    </g>
+                </g>
 
                 <defs>
                     <linearGradient id="hero-grad" x1="0%" y1="0%" x2="100%" y2="100%">
