@@ -50,8 +50,12 @@
         body {
             background-color: var(--white);
             color: var(--dark);
-            line-height: 1.85;
-            /* Improved for readability */
+            font-size: 20px;
+            /* Bigger base font */
+            line-height: 2;
+            /* More spacious line height */
+            letter-spacing: 0.03em;
+            /* Breathable spacing */
             overflow-x: hidden;
             cursor: default;
         }
@@ -113,14 +117,37 @@
             transition: background 0.2s ease-out;
         }
 
+        h1 {
+            font-size: clamp(48px, 10vw, 92px);
+            /* Massive, readable headline */
+            line-height: 1.1;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: clamp(36px, 6vw, 56px);
+            line-height: 1.2;
+            margin-bottom: 25px;
+        }
+
+        h3 {
+            font-size: clamp(28px, 4vw, 36px);
+            line-height: 1.3;
+            margin-bottom: 20px;
+        }
+
+        h4 {
+            font-size: 24px;
+            line-height: 1.4;
+        }
+
         h1,
         h2,
         h3,
         h4 {
             font-family: 'Kurale', serif;
             font-weight: 400;
-            letter-spacing: 0.01em;
-            line-height: 1.25;
+            letter-spacing: 0.02em;
         }
 
         a {
@@ -362,36 +389,27 @@
 
         nav ul li a {
             font-weight: 600;
-            font-size: 16px;
+            font-size: 20px;
+            /* Bigger nav links */
             color: var(--dark);
-            opacity: 0.6;
+            opacity: 0.7;
             position: relative;
             transition: var(--transition);
         }
 
-        /* Nav links changing colors */
         nav ul li a:hover {
             opacity: 1;
             transform: translateY(-2px);
         }
 
-        /* Sync nav color with the chameleon disco */
-        .scrolled nav ul li a {
-            color: var(--dark);
-        }
-
-        .nav-color-shift {
-            color: var(--primary) !important;
-            opacity: 1 !important;
-        }
-
         .cta-button {
             background: var(--dark);
             color: white;
-            padding: 14px 32px;
-            border-radius: 35px;
+            padding: 16px 36px;
+            border-radius: 40px;
             font-weight: 700;
-            font-size: 15px;
+            font-size: 18px;
+            /* Bigger CTA */
             border: none;
             cursor: pointer;
             transition: var(--transition);
@@ -428,12 +446,12 @@
         }
 
         .hero p {
-            font-size: clamp(18px, 2vw, 22px);
-            color: #666;
-            max-width: 600px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-            /* Balanced for larger hero text */
+            font-size: clamp(22px, 3vw, 26px);
+            color: #444;
+            max-width: 800px;
+            margin-bottom: 50px;
+            line-height: 1.8;
+            /* Extra spacious hero paragraph */
         }
 
         .hero-assets {
@@ -475,14 +493,15 @@
 
         .tech-item {
             background: var(--white);
-            padding: 30px;
-            border-radius: 20px;
+            padding: 45px 30px;
+            /* Taller tech items */
+            border-radius: 25px;
             box-shadow: var(--shadow);
             transition: var(--transition);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
             position: relative;
             overflow: hidden;
         }
@@ -505,15 +524,15 @@
         }
 
         .tech-icon {
-            font-size: 32px;
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
+            font-size: 42px;
+            font-family: 'Kurale', serif;
+            font-weight: 400;
             color: var(--primary);
         }
 
         .tech-name {
             font-weight: 700;
-            font-size: 16px;
+            font-size: 20px;
         }
 
         /* --- Features --- */
@@ -538,10 +557,12 @@
         }
 
         .feature-card {
-            padding: 40px;
-            border-radius: 30px;
+            padding: 60px 50px;
+            /* More spacious cards */
+            border-radius: 40px;
             background: var(--white);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 2px solid rgba(0, 0, 0, 0.05);
+            /* Bolder border */
             transition: var(--transition);
         }
 
@@ -551,9 +572,9 @@
         }
 
         .feature-card p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #666;
+            font-size: 18px;
+            line-height: 1.85;
+            color: #444;
         }
 
         .feature-icon {
@@ -651,7 +672,7 @@
             font-size: 32px;
             margin-bottom: 40px;
             opacity: 0.8;
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Kurale', serif;
             text-transform: lowercase;
         }
 
@@ -663,16 +684,15 @@
         }
 
         .social-link {
+            padding: 30px;
+            border-radius: 25px;
+            background: var(--white);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
-            padding: 25px 45px;
-            background: var(--white);
-            border-radius: 24px;
+            gap: 15px;
             box-shadow: var(--shadow);
             transition: var(--transition);
-            border: 1px solid rgba(0, 0, 0, 0.02);
         }
 
         .social-link:hover {
@@ -683,32 +703,36 @@
         }
 
         .social-icon {
-            font-size: 28px;
-            font-weight: 800;
-            font-family: 'Outfit', sans-serif;
+            font-size: 48px;
+            /* Bigger icons */
+            color: var(--dark);
+            font-family: 'Kurale', serif;
         }
 
         .social-name {
             font-weight: 700;
-            font-size: 13px;
+            font-size: 18px;
+            /* Bigger names */
             text-transform: uppercase;
-            letter-spacing: 3px;
-            opacity: 0.6;
+            letter-spacing: 4px;
+            opacity: 0.8;
         }
 
         /* --- Footer --- */
         footer {
-            padding: 50px 10%;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 80px 10%;
+            border-top: 2px solid rgba(0, 0, 0, 0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-size: 18px;
         }
 
         .footer-logo {
             font-family: 'Kurale', serif;
             font-weight: 800;
-            font-size: 20px;
+            font-size: 32px;
+            /* Large footer branding */
         }
 
         @media (max-width: 768px) {
