@@ -14,15 +14,22 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         :root {
-            --primary: #FF7675;
-            --secondary: #74B9FF;
-            --accent: #FFEAA7;
-            --dark: #2D3436;
-            --light: #F9FAFB;
+            --primary: #FF8A8A;
+            /* Matte Pastel Red */
+            --secondary: #8AB4FF;
+            /* Matte Pastel Blue */
+            --accent: #FFEB8A;
+            /* Matte Pastel Yellow */
+            --green: #8AFFD4;
+            /* Matte Pastel Green */
+            --purple: #C88AFF;
+            /* Matte Pastel Purple */
+            --dark: #34495E;
+            --light: #F7F9FB;
             --white: #FFFFFF;
-            --glass: rgba(255, 255, 255, 0.7);
-            --shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
-            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            --glass: rgba(255, 255, 255, 0.85);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.05);
+            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -356,26 +363,23 @@
             color: var(--dark);
             opacity: 0.6;
             position: relative;
-        }
-
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
             transition: var(--transition);
         }
 
-        nav ul li a:hover::after {
-            width: 100%;
-        }
-
+        /* Nav links changing colors */
         nav ul li a:hover {
             opacity: 1;
-            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Sync nav color with the chameleon disco */
+        .scrolled nav ul li a {
+            color: var(--dark);
+        }
+
+        .nav-color-shift {
+            color: var(--primary) !important;
+            opacity: 1 !important;
         }
 
         .cta-button {
@@ -797,8 +801,8 @@
 
     <header id="main-header">
         <div class="logo">
-            <div class="logo-symbol"
-                style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #FF7675, #74B9FF, #FFEAA7); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Kurale', serif; font-weight: 800; font-size: 26px;">
+            <div id="logo-square" class="logo-symbol"
+                style="width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent)); display: flex; align-items: center; justify-content: center; color: white; font-family: 'Kurale', serif; font-weight: 800; font-size: 26px;">
                 m</div>
             <div class="logo-text">
                 <span>m</span><span>o</span><span>n</span><span>o</span>
@@ -820,69 +824,13 @@
             style="width: 600px; height: 600px; bottom: -10%; right: -10%; background: var(--secondary); opacity: 0.1;">
         </div>
 
-        <!-- Logo Branding Centerpiece (Matches Image) -->
+        <!-- Logo Branding Centerpiece (Using Uploaded Image) -->
         <div class="fade-in" style="margin-bottom: 50px; text-align: center;">
-            <svg width="340" height="340" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Circuit Background Aura -->
-                <g class="circuit-traces">
-                    <path class="circuit-line" d="M30 110C40 110 45 125 60 125" />
-                    <path class="circuit-line" d="M20 130C35 130 40 145 55 145" />
-                    <path class="circuit-line" d="M165 90C175 95 185 110 180 130" />
-                    <path class="circuit-line" d="M160 70C175 75 190 90 190 120" />
-                    <circle class="circuit-dot" cx="60" cy="125" r="2.5" />
-                    <circle class="circuit-dot" cx="55" cy="145" r="2.5" />
-                    <circle class="circuit-dot" cx="180" cy="130" r="2.5" />
-                    <circle class="circuit-dot" cx="190" cy="120" r="2.5" />
-                    <path class="circuit-line" d="M150 60C165 65 175 45 185 55" />
-                    <circle class="circuit-dot" cx="185" cy="55" r="2" />
-                </g>
-
-                <g class="chameleon-crawl">
-                    <g style="animation: breathing 5s infinite ease-in-out;">
-                        <!-- Main Body with Geometric Colors -->
-                        <path
-                            d="M50 120C50 90 80 60 115 60C150 60 165 90 165 120C165 145 140 155 115 155C90 155 70 145 50 120Z"
-                            fill="url(#hero-grad-textured)" />
-
-                        <!-- Geometric Segments Overlay -->
-                        <path d="M60 110L95 75L120 95L85 130Z" fill="white" opacity="0.15" />
-                        <path d="M110 70L145 80L150 110L115 105Z" fill="white" opacity="0.1" />
-                        <path d="M80 140L110 145L130 120L100 115Z" fill="black" opacity="0.05" />
-
-                        <!-- Dark Helmet Head -->
-                        <path d="M50 120L40 95L75 75L95 90L85 118L50 120Z" fill="#2d3436" />
-
-                        <!-- Tail Construction -->
-                        <path d="M145 130C145 165 185 165 185 135C185 115 165 115 158 128" stroke="#2d3436"
-                            stroke-width="7" stroke-linecap="round" fill="none" />
-                        <path d="M158 128C155 135 160 142 165 138" stroke="#2d3436" stroke-width="5"
-                            stroke-linecap="round" fill="none" />
-
-                        <!-- Detailed Eye -->
-                        <g>
-                            <circle cx="65" cy="95" r="11" fill="white" />
-                            <circle id="eye-pupil" class="eye-rolling" cx="65" cy="95" r="5.5" fill="#2d3436" />
-                            <circle cx="68" cy="92" r="2.5" fill="white" opacity="0.8" />
-                        </g>
-
-                        <!-- Legs -->
-                        <path class="leg-anim" d="M80 145L70 165M70 165L60 160" stroke="#2d3436" stroke-width="5"
-                            stroke-linecap="round" />
-                        <path class="leg-anim" style="animation-delay: -1.5s;" d="M120 150L115 170M115 170L105 165"
-                            stroke="#2d3436" stroke-width="5" stroke-linecap="round" />
-                    </g>
-                </g>
-
-                <defs>
-                    <linearGradient id="hero-grad-textured" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="10%" stop-color="#FF7675" /> <!-- Pink -->
-                        <stop offset="40%" stop-color="#FFAE75" /> <!-- Orange -->
-                        <stop offset="70%" stop-color="#FFEAA7" /> <!-- Yellow -->
-                        <stop offset="100%" stop-color="#74B9FF" /> <!-- Blue -->
-                    </linearGradient>
-                </defs>
-            </svg>
-            <div style="margin-top: -30px;">
+            <div style="position: relative; display: inline-block;">
+                <img src="image.png" alt="Mono Logo"
+                    style="width: 320px; height: auto; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));" />
+            </div>
+            <div style="margin-top: -40px;">
                 <p class="brand-text-animated" style="font-size: 64px; letter-spacing: -3px; margin-bottom: 5px;">mono
                 </p>
                 <div style="height: 1px; width: 100px; background: var(--dark); opacity: 0.1; margin: 0 auto 15px;">
@@ -1002,43 +950,12 @@
     </footer>
 
     <script>
-        // Mouse Following Background Glow
-        const bgGlow = document.getElementById('bg-glow');
-        const pupil = document.getElementById('eye-pupil');
-        let eyeTimeout;
-
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth) * 100;
-            const y = (e.clientY / window.innerHeight) * 100;
-            document.documentElement.style.setProperty('--mouse-x', `${x}%`);
-            document.documentElement.style.setProperty('--mouse-y', `${y}%`);
-
-            // Eye tracking
-            if (pupil) {
-                // Pause rolling animation when tracking mouse
-                pupil.classList.remove('eye-rolling');
-                clearTimeout(eyeTimeout);
-
-                const rect = pupil.getBoundingClientRect();
-                const pupilX = rect.left + rect.width / 2;
-                const pupilY = rect.top + rect.height / 2;
-                const angle = Math.atan2(e.clientY - pupilY, e.clientX - pupilX);
-                const distance = Math.min(3, Math.hypot(e.clientX - pupilX, e.clientY - pupilY) / 100);
-
-                pupil.style.transform = `translate(${Math.cos(angle) * distance * 2}px, ${Math.sin(angle) * distance * 2}px)`;
-
-                // Resume rolling after 1s of stillness
-                eyeTimeout = setTimeout(() => {
-                    pupil.classList.add('eye-rolling');
-                    pupil.style.transform = '';
-                }, 1000);
-            }
-        });
-
-        // Header Scroll Effect & Background Disco Shift
+        // Global variables
         const header = document.getElementById('main-header');
         const bgSlide = document.getElementById('bg-slide');
+        const logoSquare = document.getElementById('logo-square');
 
+        // Scroll Handlers (Background Disco & Nav Shift)
         window.addEventListener('scroll', () => {
             // Header state
             if (window.scrollY > 50) {
@@ -1052,14 +969,22 @@
             const scrollPercent = (window.scrollY / totalScroll) * 100;
 
             if (bgSlide) {
-                // Sync position with scroll
                 bgSlide.style.backgroundPosition = `${scrollPercent}% ${scrollPercent}%`;
-                // Dramatically shift hue based on scroll for 'chameleon skin' effect
-                // Shifting 360 degrees over the full scroll height
                 const hue = (window.scrollY / totalScroll) * 360;
-                bgSlide.style.filter = `hue-rotate(${hue}deg) saturate(1.5)`;
-                // Slightly increase opacity as you scroll deeper
-                bgSlide.style.opacity = 0.15 + (scrollPercent / 1000);
+                bgSlide.style.filter = `hue-rotate(${hue}deg) saturate(1.2)`;
+                bgSlide.style.opacity = 0.12 + (scrollPercent / 1000);
+
+                // Dynamically update nav link colors based on scroll
+                document.querySelectorAll('nav ul li a').forEach((link, index) => {
+                    const linkHue = (hue + (index * 40)) % 360;
+                    link.style.color = `hsl(${linkHue}, 60%, 55%)`;
+                });
+
+                // Update 'm' in square color palette logic if any
+                if (logoSquare) {
+                    const lHue = (hue + 180) % 360;
+                    logoSquare.style.background = `linear-gradient(135deg, hsl(${lHue}, 80%, 75%), hsl(${(lHue + 60) % 360}, 80%, 75%))`;
+                }
             }
         });
 
