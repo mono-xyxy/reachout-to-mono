@@ -62,11 +62,11 @@
             height: 100%;
             z-index: -3;
             background: linear-gradient(45deg,
-                    #FF7675, #74B9FF, #FFEAA7, #55E6C1, #A29BFE, #FF7675);
+                    #FF8A8A, #8AB4FF, #FFEB8A, #8AFFD4, #C88AFF, #FF8A8A);
             background-size: 600% 600%;
-            animation: discoBG 12s linear infinite;
-            opacity: 0.15;
-            /* Increased for a more 'skin-like' presence */
+            animation: discoBG 15s linear infinite;
+            opacity: 0.12;
+            /* Matte subtleness */
         }
 
         @keyframes discoBG {
@@ -954,6 +954,7 @@
         const header = document.getElementById('main-header');
         const bgSlide = document.getElementById('bg-slide');
         const logoSquare = document.getElementById('logo-square');
+        const heroImg = document.querySelector('.hero img');
 
         // Scroll Handlers (Background Disco & Nav Shift)
         window.addEventListener('scroll', () => {
@@ -973,6 +974,11 @@
                 const hue = (window.scrollY / totalScroll) * 360;
                 bgSlide.style.filter = `hue-rotate(${hue}deg) saturate(1.2)`;
                 bgSlide.style.opacity = 0.12 + (scrollPercent / 1000);
+
+                // Hue-rotate the hero image too for 'alive' effect
+                if (heroImg) {
+                    heroImg.style.filter = `hue-rotate(${hue}deg) drop-shadow(0 20px 40px rgba(0,0,0,0.1))`;
+                }
 
                 // Dynamically update nav link colors based on scroll
                 document.querySelectorAll('nav ul li a').forEach((link, index) => {
