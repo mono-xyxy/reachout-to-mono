@@ -820,48 +820,75 @@
             style="width: 600px; height: 600px; bottom: -10%; right: -10%; background: var(--secondary); opacity: 0.1;">
         </div>
 
-        <!-- Logo Branding Centerpiece -->
-        <div class="fade-in" style="margin-bottom: 40px; text-align: center;">
-            <svg width="220" height="220" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg"
-                style="filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));">
-                <g class="chameleon-crawl">
-                    <!-- Legs -->
-                    <path class="leg-anim" d="M75 135L65 155M65 155L55 150" stroke="#2d3436" stroke-width="4"
-                        stroke-linecap="round" />
-                    <path class="leg-anim" style="animation-delay: -1s;" d="M110 145L105 165M105 165L95 160"
-                        stroke="#2d3436" stroke-width="4" stroke-linecap="round" />
+        <!-- Logo Branding Centerpiece (Matches Image) -->
+        <div class="fade-in" style="margin-bottom: 50px; text-align: center;">
+            <svg width="340" height="340" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Circuit Background Aura -->
+                <g class="circuit-traces">
+                    <path class="circuit-line" d="M30 110C40 110 45 125 60 125" />
+                    <path class="circuit-line" d="M20 130C35 130 40 145 55 145" />
+                    <path class="circuit-line" d="M165 90C175 95 185 110 180 130" />
+                    <path class="circuit-line" d="M160 70C175 75 190 90 190 120" />
+                    <circle class="circuit-dot" cx="60" cy="125" r="2.5" />
+                    <circle class="circuit-dot" cx="55" cy="145" r="2.5" />
+                    <circle class="circuit-dot" cx="180" cy="130" r="2.5" />
+                    <circle class="circuit-dot" cx="190" cy="120" r="2.5" />
+                    <path class="circuit-line" d="M150 60C165 65 175 45 185 55" />
+                    <circle class="circuit-dot" cx="185" cy="55" r="2" />
+                </g>
 
+                <g class="chameleon-crawl">
                     <g style="animation: breathing 5s infinite ease-in-out;">
-                        <!-- Body Segments -->
+                        <!-- Main Body with Geometric Colors -->
                         <path
                             d="M50 120C50 90 80 60 115 60C150 60 165 90 165 120C165 145 140 155 115 155C90 155 70 145 50 120Z"
-                            fill="url(#hero-grad)" />
-                        <path d="M60 100L90 70L120 90L90 110Z" fill="white" opacity="0.1" />
-                        <path d="M100 75L140 80L145 110L110 105Z" fill="white" opacity="0.1" />
+                            fill="url(#hero-grad-textured)" />
 
-                        <!-- Head / Eyes -->
-                        <path d="M50 120L40 90L75 70L95 85L85 115L50 120Z" fill="#2d3436" />
+                        <!-- Geometric Segments Overlay -->
+                        <path d="M60 110L95 75L120 95L85 130Z" fill="white" opacity="0.15" />
+                        <path d="M110 70L145 80L150 110L115 105Z" fill="white" opacity="0.1" />
+                        <path d="M80 140L110 145L130 120L100 115Z" fill="black" opacity="0.05" />
+
+                        <!-- Dark Helmet Head -->
+                        <path d="M50 120L40 95L75 75L95 90L85 118L50 120Z" fill="#2d3436" />
+
+                        <!-- Tail Construction -->
+                        <path d="M145 130C145 165 185 165 185 135C185 115 165 115 158 128" stroke="#2d3436"
+                            stroke-width="7" stroke-linecap="round" fill="none" />
+                        <path d="M158 128C155 135 160 142 165 138" stroke="#2d3436" stroke-width="5"
+                            stroke-linecap="round" fill="none" />
+
+                        <!-- Detailed Eye -->
                         <g>
-                            <circle cx="63" cy="92" r="9" fill="white" />
-                            <circle id="eye-pupil" class="eye-rolling" cx="63" cy="92" r="4.5" fill="black" />
+                            <circle cx="65" cy="95" r="11" fill="white" />
+                            <circle id="eye-pupil" class="eye-rolling" cx="65" cy="95" r="5.5" fill="#2d3436" />
+                            <circle cx="68" cy="92" r="2.5" fill="white" opacity="0.8" />
                         </g>
 
-                        <!-- Tail -->
-                        <path d="M145 130C145 160 180 160 180 135C180 120 165 120 160 130" stroke="#2d3436"
-                            stroke-width="5" stroke-linecap="round" fill="none" />
+                        <!-- Legs -->
+                        <path class="leg-anim" d="M80 145L70 165M70 165L60 160" stroke="#2d3436" stroke-width="5"
+                            stroke-linecap="round" />
+                        <path class="leg-anim" style="animation-delay: -1.5s;" d="M120 150L115 170M115 170L105 165"
+                            stroke="#2d3436" stroke-width="5" stroke-linecap="round" />
                     </g>
                 </g>
+
                 <defs>
-                    <linearGradient id="hero-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:var(--primary)" />
-                        <stop offset="100%" style="stop-color:var(--secondary)" />
+                    <linearGradient id="hero-grad-textured" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="10%" stop-color="#FF7675" /> <!-- Pink -->
+                        <stop offset="40%" stop-color="#FFAE75" /> <!-- Orange -->
+                        <stop offset="70%" stop-color="#FFEAA7" /> <!-- Yellow -->
+                        <stop offset="100%" stop-color="#74B9FF" /> <!-- Blue -->
                     </linearGradient>
                 </defs>
             </svg>
-            <div style="margin-top: -20px;">
-                <p class="brand-text-animated" style="font-size: 56px; font-weight: 800; letter-spacing: -2px;">mono</p>
+            <div style="margin-top: -30px;">
+                <p class="brand-text-animated" style="font-size: 64px; letter-spacing: -3px; margin-bottom: 5px;">mono
+                </p>
+                <div style="height: 1px; width: 100px; background: var(--dark); opacity: 0.1; margin: 0 auto 15px;">
+                </div>
                 <p
-                    style="font-size: 14px; letter-spacing: 5px; opacity: 0.4; font-weight: 600; text-transform: uppercase;">
+                    style="font-size: 15px; letter-spacing: 6px; opacity: 0.5; font-weight: 600; text-transform: uppercase;">
                     YOUR WEB BUILDER</p>
             </div>
         </div>
