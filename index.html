@@ -47,7 +47,7 @@
             cursor: default;
         }
 
-        /* --- Color Slide Background Animation --- */
+        /* --- Chameleon Skin Disco Background --- */
         #bg-slide {
             position: fixed;
             top: 0;
@@ -55,17 +55,15 @@
             width: 100%;
             height: 100%;
             z-index: -3;
-            background: linear-gradient(120deg,
-                    rgba(255, 118, 117, 0.03) 0%,
-                    rgba(116, 185, 255, 0.03) 25%,
-                    rgba(255, 234, 167, 0.03) 50%,
-                    rgba(116, 185, 255, 0.03) 75%,
-                    rgba(255, 118, 117, 0.03) 100%);
-            background-size: 400% 400%;
-            animation: slideBG 20s ease infinite;
+            background: linear-gradient(45deg,
+                    #FF7675, #74B9FF, #FFEAA7, #55E6C1, #A29BFE, #FF7675);
+            background-size: 600% 600%;
+            animation: discoBG 12s linear infinite;
+            opacity: 0.15;
+            /* Increased for a more 'skin-like' presence */
         }
 
-        @keyframes slideBG {
+        @keyframes discoBG {
             0% {
                 background-position: 0% 50%;
             }
@@ -77,6 +75,20 @@
             100% {
                 background-position: 0% 50%;
             }
+        }
+
+        /* --- Chameleon Skin Pattern Overlay --- */
+        #bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.04;
+            pointer-events: none;
+            background-image: radial-gradient(var(--dark) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
 
         /* --- Custom Mouse Gradient --- */
@@ -429,6 +441,20 @@
             flex-direction: column;
             align-items: center;
             gap: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+            background-size: 10px 10px;
+            pointer-events: none;
         }
 
         .tech-item:hover {
@@ -489,15 +515,27 @@
         }
 
         .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--light);
-            border-radius: 15px;
+            width: 65px;
+            height: 65px;
+            background: var(--white);
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 25px;
-            font-size: 24px;
+            font-size: 28px;
+            color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            /* Chameleon skin texture on icons */
+            background-image: radial-gradient(circle, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 8px 8px;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            color: var(--secondary);
+            background-image: radial-gradient(circle, rgba(116, 185, 255, 0.2) 2px, transparent 2px);
         }
 
         /* --- CTA Section --- */
@@ -719,6 +757,7 @@
 <body>
 
     <div id="bg-slide"></div>
+    <div id="bg-pattern"></div>
     <div id="bg-glow"></div>
 
     <header id="main-header">
