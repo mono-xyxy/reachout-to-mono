@@ -820,13 +820,6 @@
             style="width: 600px; height: 600px; bottom: -10%; right: -10%; background: var(--secondary); opacity: 0.1;">
         </div>
 
-        <!-- Logo Branding Centerpiece (Using Uploaded Image) -->
-        <div class="fade-in" style="margin-bottom: 60px; text-align: center;">
-            <div style="position: relative; display: inline-block;">
-                <img src="image.png" alt="Mono Logo"
-                    style="width: 360px; height: auto; mix-blend-mode: multiply; filter: contrast(1.1) drop-shadow(0 20px 40px rgba(0,0,0,0.05));" />
-            </div>
-        </div>
 
         <h1 class="fade-in" style="font-size: clamp(32px, 6vw, 64px); transition-delay: 0.2s;">your web solution builder
         </h1>
@@ -941,7 +934,6 @@
         const header = document.getElementById('main-header');
         const bgSlide = document.getElementById('bg-slide');
         const logoSquare = document.getElementById('logo-square');
-        const heroImg = document.querySelector('.hero img');
 
         // Scroll Handlers (Background Disco & Nav Shift)
         window.addEventListener('scroll', () => {
@@ -962,10 +954,6 @@
                 bgSlide.style.filter = `hue-rotate(${hue}deg) saturate(1.2)`;
                 bgSlide.style.opacity = 0.12 + (scrollPercent / 1000);
 
-                // Hue-rotate the hero image too for 'alive' effect
-                if (heroImg) {
-                    heroImg.style.filter = `hue-rotate(${hue}deg) drop-shadow(0 20px 40px rgba(0,0,0,0.1))`;
-                }
 
                 // Dynamically update nav link colors based on scroll
                 document.querySelectorAll('nav ul li a').forEach((link, index) => {
