@@ -827,10 +827,6 @@
     <div id="bg-glow"></div>
 
     <header id="main-header">
-        <div class="logo">
-            <img src="image.png" alt="Mono"
-                style="height: 45px; width: auto; object-fit: contain; mix-blend-mode: multiply;" />
-        </div>
         <nav>
             <ul>
                 <li><a href="#features">Features</a></li>
@@ -848,11 +844,15 @@
         </div>
 
 
-        <!-- Logo Branding Centerpiece (Re-added for Visibility) -->
-        <div class="fade-in" style="margin-bottom: 50px; text-align: center;">
+        <!-- Logo Branding Centerpiece (Max Prominence) -->
+        <div class="fade-in" style="margin-bottom: -20px; text-align: center; position: relative; z-index: 10;">
             <div style="position: relative; display: inline-block;">
+                <!-- Matte Glow Backdrop -->
+                <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120%; height: 120%; background: radial-gradient(circle, rgba(255,138,138,0.2) 0%, rgba(138,180,255,0.1) 50%, transparent 70%); filter: blur(40px); z-index: -1;">
+                </div>
                 <img src="image.png" alt="Mono Logo"
-                    style="width: 450px; height: auto; mix-blend-mode: multiply; filter: contrast(1.1) drop-shadow(0 10px 30px rgba(0,0,0,0.1));" />
+                    style="width: 550px; height: auto; mix-blend-mode: multiply; filter: contrast(1.1) brightness(1.05) drop-shadow(0 20px 50px rgba(0,0,0,0.15));" />
             </div>
         </div>
 
