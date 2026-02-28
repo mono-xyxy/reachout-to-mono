@@ -1118,6 +1118,12 @@
                 <span style="font-weight: 700; color: var(--primary); font-size: 18px;"><i class="ph-fill ph-gift"></i>
                     Special Offer:</span><span style="font-weight: 600; font-size: 16px;"> Incredible discounts for our
                     first 10 clients!</span>
+                <div
+                    style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(79, 70, 229, 0.2); font-weight: 700; color: var(--text-heading); font-size: 16px;">
+                    <i class="ph-fill ph-users"></i> Spots Claimed: <span id="client-countdown-display"
+                        style="color: var(--accent); font-size: 20px;">...</span> <span
+                        style="opacity: 0.6; font-size: 14px;">/ 10</span>
+                </div>
             </div>
             <p
                 style="margin-top: 10px; font-size: 18px; color: var(--text-body); max-width: 650px; margin-left: auto; margin-right: auto;">
@@ -1125,20 +1131,40 @@
                 maintenance without thinking about it.</p>
         </div>
         <div class="services-grid">
-            <div class="service-card">
-                <h3>Google Business Profile<br>"Keep-Alive"</h3>
-                <p style="margin-top: 10px;">1 automated post to your Google Business Profile per month to keep it
-                    active.</p>
+            <div class="service-card" style="text-align: left;">
+                <h3
+                    style="text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
+                    Google Business Profile<br>"Keep-Alive"</h3>
+                <ul style="list-style-type: disc; margin-left: 20px; color: var(--text-body); font-size: 15px;">
+                    <li style="margin-bottom: 10px;"><b>Monthly Action:</b> 1 automated post to your Google Business
+                        Profile per month.</li>
+                    <li style="margin-bottom: 10px;"><b>Execution:</b> We batch-create 12 generic industry-specific
+                        posts at the start of the year and schedule them all via a scheduling tool or directly in GBP.
+                    </li>
+                    <li><b>Time Cost:</b> ~30 minutes per year (set it and forget it).</li>
+                </ul>
             </div>
-            <div class="service-card">
-                <h3>Uptime Monitoring &<br>Domain Reminders</h3>
-                <p style="margin-top: 10px;">Automated pinging to ensure your website is online, with instant email
-                    alerts.</p>
+            <div class="service-card" style="text-align: left;">
+                <h3
+                    style="text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
+                    Uptime Monitoring &<br>Domain Reminders</h3>
+                <ul style="list-style-type: disc; margin-left: 20px; color: var(--text-body); font-size: 15px;">
+                    <li style="margin-bottom: 10px;"><b>Monthly Action:</b> Automated pinging of your website to ensure
+                        it's online. If it goes down, you get an automated alert.</li>
+                    <li><b>Execution:</b> Use an automated tool like UptimeRobot to receive alerts directly to your
+                        inbox.</li>
+                </ul>
             </div>
-            <div class="service-card">
-                <h3>Basic Monthly Snapshot<br>(Automated)</h3>
-                <p style="margin-top: 10px;">Monthly email with key metrics: Visitors, Google views, and top keywords.
-                </p>
+            <div class="service-card" style="text-align: left;">
+                <h3
+                    style="text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px;">
+                    Basic Monthly Snapshot<br>(Automated)</h3>
+                <ul style="list-style-type: disc; margin-left: 20px; color: var(--text-body); font-size: 15px;">
+                    <li style="margin-bottom: 10px;"><b>Deliverable:</b> An automated monthly email with 3 key numbers:
+                        Website Visitors, Google Profile Views, and Top Searching Keyword.</li>
+                    <li><b>Execution:</b> Google Analytics / Search Console automated email reports. No manual
+                        compilation required.</li>
+                </ul>
             </div>
         </div>
     </section>
@@ -1241,7 +1267,7 @@
         <div
             style="margin-top: 25px; font-size: 16px; color: var(--text-body); max-width: 600px; margin-left: auto; margin-right: auto; text-align: center; background: white; padding: 25px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border);">
             <p style="font-weight: 700; color: var(--text-heading); margin-bottom: 12px; font-size: 18px;">💳 Payment
-                Terms: Advance to be paid per client in full.</p>
+                Terms: $360 / ₹30,000 Advance to be paid per client in full (Annual coverage).</p>
             <p style="font-weight: 500;"><i class="ph-bold ph-shield-check"
                     style="color: var(--primary); margin-right: 5px; font-size: 20px; vertical-align: middle;"></i> Mono
                 supports and encourages digital currency features of India, so we go UPI too!</p>
@@ -1316,6 +1342,24 @@
                 });
             });
         });
+
+        // Fetch Admin Client Count
+        fetch('admin.html')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const countElement = doc.getElementById('successful-clients');
+                if (countElement) {
+                    document.getElementById('client-countdown-display').innerText = countElement.innerText;
+                } else {
+                    document.getElementById('client-countdown-display').innerText = "0";
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching admin count:', error);
+                document.getElementById('client-countdown-display').innerText = "0";
+            });
     </script>
 </body>
 
