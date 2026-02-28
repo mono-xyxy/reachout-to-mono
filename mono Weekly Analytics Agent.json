@@ -1,0 +1,1311 @@
+{
+  "name": "mono Weekly Analytics Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lead-intake",
+        "options": {}
+      },
+      "id": "b04f84f2-6053-420b-ace7-6d29cb5ebaa5",
+      "name": "Lead Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "mono-lead-intake"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "timestamp",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "name",
+              "value": "={{ $json.name ?? $json.body?.name ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "email",
+              "value": "={{ $json.email ?? $json.body?.email ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a4",
+              "name": "phone",
+              "value": "={{ $json.phone ?? $json.body?.phone ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a5",
+              "name": "company",
+              "value": "={{ $json.company ?? $json.body?.company ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a6",
+              "name": "message",
+              "value": "={{ $json.message ?? $json.body?.message ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a7",
+              "name": "niche",
+              "value": "={{ $json.niche ?? $json.body?.niche ?? 'digital marketing' }}",
+              "type": "string"
+            },
+            {
+              "id": "a8",
+              "name": "source",
+              "value": "={{ $json.source ?? $json.body?.source ?? 'web' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "64cfa315-e855-47d5-9763-eb7fc3b0f985",
+      "name": "Format Lead",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Leads"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.timestamp }}",
+            "Name": "={{ $json.name }}",
+            "Email": "={{ $json.email }}",
+            "Phone": "={{ $json.phone }}",
+            "Company": "={{ $json.company }}",
+            "Message": "={{ $json.message }}",
+            "Niche": "={{ $json.niche }}",
+            "Source": "={{ $json.source }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "f2814273-9413-41e5-90e7-be3baaf9c5a1",
+      "name": "Append to Leads Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        448,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "Free Growth Audit for {{ $json.name }}",
+        "message": "Hi {{ $json.name }},\n\nThanks for reaching out! We've received your inquiry and our team will review it within 24 hours.\n\nIn the meantime, here's what you can expect:\n• Personalized growth audit for your business\n• Actionable recommendations for {{ $json.niche }}\n• A quick call to discuss your goals\n\nBest,\nThe mono Agency Team",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "bd0c57f3-2321-48b1-a55c-0f33b17cbe14",
+      "name": "Send Welcome Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        672,
+        0
+      ],
+      "webhookId": "696aa73e-e8ad-4843-99ee-acab509ba761"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={{ $env.GEMINI_API_KEY || 'YOUR_GEMINI_API_KEY' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [{\n      \"text\": \"Generate exactly 5 short, punchy Instagram Reel hooks for a {{ $('Format Lead').first().json.niche }} business. Each hook should be 1 sentence, max 10 words. Return only the 5 hooks, one per line, numbered 1-5.\"\n    }]\n  }]\n}",
+        "options": {}
+      },
+      "id": "098a22dc-a637-4d19-a62b-3e747848f49a",
+      "name": "Gemini - Generate Reel Hooks",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        880,
+        0
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const lead = $('Format Lead').first().json;\nconst gemini = $input.first().json;\nlet hooks = '';\ntry {\n  hooks = gemini?.candidates?.[0]?.content?.parts?.[0]?.text ?? 'Content generation pending';\n} catch (_) {\n  hooks = 'Content generation pending';\n}\nreturn [{ json: { ...lead, instagramHooks: hooks } }];"
+      },
+      "id": "9cf2ed93-9e66-4339-b0aa-e972b3d7fce6",
+      "name": "Extract Content",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "text": "=🔥 *New Lead*\\n📧 {{ $json.email }}\\n👤 {{ $json.name }}\\n🏢 {{ $json.company || 'N/A' }}\\n💬 {{ $json.message || 'N/A' }}\\n🎯 Niche: {{ $json.niche }}\\n\\n*Instagram Hooks for {{ $json.niche }}:*\\n{{ $json.instagramHooks }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "ef35c98e-57c8-428c-a586-22c5660de206",
+      "name": "Slack - New Lead",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1328,
+        0
+      ],
+      "webhookId": "ad2c83fc-e717-425c-9e87-a7d2fa09ef5e"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "121c7df8-177b-42d9-aea0-619b947c463b",
+      "name": "Every Monday 9am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1",
+              "name": "metaAccessToken",
+              "value": "YOUR_META_ACCESS_TOKEN",
+              "type": "string"
+            },
+            {
+              "id": "c2",
+              "name": "adAccountId",
+              "value": "act_YOUR_AD_ACCOUNT_ID",
+              "type": "string"
+            },
+            {
+              "id": "c3",
+              "name": "sheetId",
+              "value": "REPLACE_WITH_YOUR_SHEET_ID",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ffa4cf4c-be4b-46ff-93c4-554e3f653dac",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        368,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.facebook.com/v18.0/{{ $json.adAccountId }}/insights",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "fields",
+              "value": "impressions,clicks,spend,reach,cpc,cpm"
+            },
+            {
+              "name": "time_range",
+              "value": "{\"since\":\"{{ $now.minus({days: 7}).toFormat('yyyy-MM-dd') }}\",\"until\":\"{{ $now.toFormat('yyyy-MM-dd') }}\"}"
+            },
+            {
+              "name": "access_token",
+              "value": "={{ $json.metaAccessToken }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "33dc0f48-8ddc-4060-bdd8-b94e96012d32",
+      "name": "Meta Ads Insights",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        592,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={{ $env.GEMINI_API_KEY }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [{\n      \"text\": \"Analyze this Meta Ads performance data from the past week and write a 1-page marketing strategy report. Include: 1) Key metrics summary, 2) What's working, 3) Recommendations for next week.\\n\\nData: \" + JSON.stringify($input.first().json, null, 2)\n    }]\n  }]\n}",
+        "options": {}
+      },
+      "id": "c212d306-8f5c-4f32-8f5d-0b47e745bfdd",
+      "name": "Gemini - Analyze & Strategy",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        816,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nlet text = '';\ntry {\n  text = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No strategy generated';\n} catch (_) {\n  text = 'Analysis failed';\n}\nreturn [{ json: { strategy: text } }];"
+      },
+      "id": "5fb63730-542a-4581-9603-ca3abc1c85c2",
+      "name": "Extract Strategy",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Config').first().json.sheetId }}"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "WeeklyReports"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Week": "={{ $now.toFormat('yyyy-MM-dd') }}",
+            "Strategy": "={{ $json.strategy }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "cbf38ac4-e533-43a4-a3fe-17513e2a1345",
+      "name": "Save to Reports Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1248,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "3d82a233-bd9e-4164-a495-1b2e854fc540",
+      "name": "Daily 9 AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -96,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1",
+              "name": "query",
+              "value": "marketing agency mumbai",
+              "type": "string"
+            },
+            {
+              "id": "c2",
+              "name": "location",
+              "value": "Mumbai, India",
+              "type": "string"
+            },
+            {
+              "id": "c3",
+              "name": "googleApiKey",
+              "value": "YOUR_GOOGLE_MAPS_API_KEY",
+              "type": "string"
+            },
+            {
+              "id": "c4",
+              "name": "hunterApiKey",
+              "value": "YOUR_HUNTER_IO_API_KEY",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2c4a2b59-2c96-418b-8472-87c6f1920da8",
+      "name": "Search Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        128,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://maps.googleapis.com/maps/api/place/textsearch/json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ $json.query }}"
+            },
+            {
+              "name": "key",
+              "value": "={{ $json.googleApiKey }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a7a0e85b-c923-4724-8ce4-375f0184eede",
+      "name": "Google Places - Text Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        352,
+        416
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "d9afc88a-5c7f-459a-ac2e-687960ee8670",
+      "name": "Split Out Places",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.4,
+      "position": [
+        576,
+        416
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "b3998a92-245e-41fd-8d60-13b461269e78",
+      "name": "Limit 20 (Rate Safe)",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 3.4,
+      "position": [
+        784,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://maps.googleapis.com/maps/api/place/details/json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "place_id",
+              "value": "={{ $json.place_id }}"
+            },
+            {
+              "name": "fields",
+              "value": "name,formatted_address,formatted_phone_number,website,rating,user_ratings_total"
+            },
+            {
+              "name": "key",
+              "value": "={{ $('Search Config').first().json.googleApiKey }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "524d9452-4b9b-4663-ba24-3d6f69202ece",
+      "name": "Place Details (Website + Phone)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1008,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $input.first().json.result || $input.first().json;\nconst config = $('Search Config').first().json;\nreturn [{\n  json: {\n    name: r.name,\n    address: r.formatted_address || r.vicinity,\n    rating: r.rating,\n    userRatingsTotal: r.user_ratings_total,\n    website: r.website || null,\n    phone: r.formatted_phone_number || r.international_phone_number || null,\n    niche: config.query,\n    source: 'Google Maps'\n  }\n}];"
+      },
+      "id": "53ea02d7-c46a-487a-9042-22c0665cd9bc",
+      "name": "Format Place Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1232,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.hunter.io/v2/domain-search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "domain",
+              "value": "={{ $json.website ? new URL($json.website).hostname.replace('www.','') : 'no-website.local' }}"
+            },
+            {
+              "name": "api_key",
+              "value": "={{ $('Search Config').first().json.hunterApiKey }}"
+            },
+            {
+              "name": "limit",
+              "value": "1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dc8ca060-a09c-45a6-84ed-1417befe862a",
+      "name": "Hunter.io - Find Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1456,
+        416
+      ],
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const place = $('Format Place Data').item.json;\nconst hunter = $input.first().json;\nlet email = null;\ntry {\n  email = hunter?.data?.emails?.[0]?.value || null;\n} catch (_) {}\nreturn [{ json: { ...place, email: email || place.email } }];"
+      },
+      "id": "6b72f6a8-7f61-42bf-a7ee-29bb3fddead2",
+      "name": "Merge Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_YOUR_SHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Name": "={{ $json.name }}",
+            "Email": "={{ $json.email }}",
+            "Phone": "={{ $json.phone }}",
+            "Website": "={{ $json.website }}",
+            "Address": "={{ $json.address }}",
+            "Rating": "={{ $json.rating }}",
+            "Reviews": "={{ $json.userRatingsTotal }}",
+            "Niche": "={{ $json.niche }}",
+            "Source": "={{ $json.source }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "d0032f9a-e154-4b93-8c3b-5b907b6215d3",
+      "name": "Append to Prospects",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1888,
+        416
+      ]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "text": "=🗺️ *New Google Maps Prospect*\\n{{ $json.name }}\\n📧 {{ $json.email || 'N/A' }}\\n📞 {{ $json.phone || 'N/A' }}\\n⭐ {{ $json.rating }} ({{ $json.userRatingsTotal }} reviews)\\n🔗 {{ $json.website || 'N/A' }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "cfa5b0fe-78fe-4883-9937-d7ec4f94058a",
+      "name": "Slack - New Prospect",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2112,
+        416
+      ],
+      "webhookId": "3aefdc20-a5d8-4fd5-9cf2-0dcbc333780c"
+    },
+    {
+      "parameters": {
+        "url": "=https://instagram-scraper-api2.p.rapidapi.com/v1/search?keyword={{ encodeURIComponent($json.niche) }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-RapidAPI-Key",
+              "value": "={{ $json.apiKey }}"
+            },
+            {
+              "name": "X-RapidAPI-Host",
+              "value": "instagram-scraper-api2.p.rapidapi.com"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "83171751-4603-44ce-b904-59f2a8845722",
+      "name": "Instagram Search (RapidAPI/Apify)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        528,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $input.first().json;\nlet list = r.data || r.results || r.items || (Array.isArray(r) ? r : []);\nif (!Array.isArray(list)) list = [];\nreturn list.map(item => ({ json: item }));"
+      },
+      "id": "53da71ea-dbfa-4127-881f-05623f1692c1",
+      "name": "Normalize API Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        752,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const minFollowers = $('Search Config1').first().json.minFollowers || 2000;\nconst items = $input.all();\nconst niche = $('Search Config1').first().json.niche;\nconst keywords = ['booking', 'clients', 'DM for', 'contact', 'hire', 'enquiry'];\nreturn items\n  .map(i => i.json)\n  .filter(p => {\n    const followers = Number(p.follower_count || p.followers || 0);\n    const bio = (p.biography || p.bio || '').toLowerCase();\n    const hasWebsite = !!(p.external_url || p.website);\n    const hasEmail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/.test(bio);\n    const hasIntent = keywords.some(k => bio.includes(k.toLowerCase()));\n    return followers >= minFollowers && (hasWebsite || hasEmail || hasIntent);\n  })\n  .map(p => ({ json: { ...p, niche } }));"
+      },
+      "id": "72023fd7-2821-4ef5-ba97-028dffb124e7",
+      "name": "Filter Qualified",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst bio = (item.biography || item.bio || '').toString();\nconst external = (item.external_url || item.website || '').toString();\nconst text = bio + ' ' + external;\nconst match = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}/);\nconst email = match ? match[0] : null;\nreturn [{\n  json: {\n    ...item,\n    email: email,\n    name: item.full_name || item.username || item.username || 'Unknown',\n    handle: item.username || item.username || '',\n    followers: item.follower_count || item.followers || 0,\n    website: item.external_url || item.website || '',\n    niche: $('Search Config1').first().json.niche,\n    source: 'Instagram'\n  }\n}];"
+      },
+      "id": "aba97131-8e80-45d9-b148-4e23a1294808",
+      "name": "Extract Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1184,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "929ddfe7-5d5a-4880-b2a3-3ff9b972bd11",
+      "name": "Daily 9 AM1",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1",
+              "name": "niche",
+              "value": "dentist mumbai",
+              "type": "string"
+            },
+            {
+              "id": "c2",
+              "name": "apiKey",
+              "value": "YOUR_RAPIDAPI_OR_APIFY_KEY",
+              "type": "string"
+            },
+            {
+              "id": "c3",
+              "name": "minFollowers",
+              "value": 2000,
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c39dd989-2333-4029-b389-39486fb0b24b",
+      "name": "Search Config1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        304,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "REPLACE_WITH_YOUR_SHEET_ID"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Prospects"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now.toISO() }}",
+            "Name": "={{ $json.name }}",
+            "Handle": "={{ $json.handle }}",
+            "Email": "={{ $json.email }}",
+            "Followers": "={{ $json.followers }}",
+            "Website": "={{ $json.website }}",
+            "Niche": "={{ $json.niche }}",
+            "Source": "={{ $json.source }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "bd69a9d6-2613-4d08-9756-9c807b2d2cf4",
+      "name": "Append to Prospects1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1408,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "text": "=🎯 *New Prospect Found*\\n@{{ $json.handle }}\\nFollowers: {{ $json.followers }}\\nEmail: {{ $json.email || 'N/A' }}\\nWebsite: {{ $json.website || 'N/A' }}\\nNiche: {{ $json.niche }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "6696dc9d-2c8d-4503-9ade-9ce89925342e",
+      "name": "Slack - New Prospect1",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        1632,
+        640
+      ],
+      "webhookId": "7c9595db-7354-4f01-b41c-2ed4e732169a"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                1
+              ],
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "id": "43cc45cf-ca29-4095-9004-38d9b06e1b27",
+      "name": "Every Monday 9am1",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        144,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1",
+              "name": "metaAccessToken",
+              "value": "YOUR_META_ACCESS_TOKEN",
+              "type": "string"
+            },
+            {
+              "id": "c2",
+              "name": "adAccountId",
+              "value": "act_YOUR_AD_ACCOUNT_ID",
+              "type": "string"
+            },
+            {
+              "id": "c3",
+              "name": "sheetId",
+              "value": "REPLACE_WITH_YOUR_SHEET_ID",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c0b4ed66-4183-4d33-b75e-2bf9f61d791a",
+      "name": "Config1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        368,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://graph.facebook.com/v18.0/{{ $json.adAccountId }}/insights",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "fields",
+              "value": "impressions,clicks,spend,reach,cpc,cpm"
+            },
+            {
+              "name": "time_range",
+              "value": "{\"since\":\"{{ $now.minus({days: 7}).toFormat('yyyy-MM-dd') }}\",\"until\":\"{{ $now.toFormat('yyyy-MM-dd') }}\"}"
+            },
+            {
+              "name": "access_token",
+              "value": "={{ $json.metaAccessToken }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "49faf7e0-00d0-40b4-b6ce-b7fb04e5bbd3",
+      "name": "Meta Ads Insights1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        592,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={{ $env.GEMINI_API_KEY }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [{\n    \"parts\": [{\n      \"text\": \"Analyze this Meta Ads performance data from the past week and write a 1-page marketing strategy report. Include: 1) Key metrics summary, 2) What's working, 3) Recommendations for next week.\\n\\nData: \" + JSON.stringify($input.first().json, null, 2)\n    }]\n  }]\n}",
+        "options": {}
+      },
+      "id": "e2f654e9-66b9-4847-8e95-125176bfc00b",
+      "name": "Gemini - Analyze & Strategy1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        816,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nlet text = '';\ntry {\n  text = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? 'No strategy generated';\n} catch (_) {\n  text = 'Analysis failed';\n}\nreturn [{ json: { strategy: text } }];"
+      },
+      "id": "68923769-81c6-498a-9a6c-1760eecd26f9",
+      "name": "Extract Strategy1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1024,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Config1').first().json.sheetId }}"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "WeeklyReports"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Week": "={{ $now.toFormat('yyyy-MM-dd') }}",
+            "Strategy": "={{ $json.strategy }}"
+          }
+        },
+        "options": {}
+      },
+      "id": "7a735f61-92e4-4751-a9c3-76d71236ec20",
+      "name": "Save to Reports Sheet1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1248,
+        880
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Lead Webhook": {
+      "main": [
+        [
+          {
+            "node": "Format Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Lead": {
+      "main": [
+        [
+          {
+            "node": "Append to Leads Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append to Leads Sheet": {
+      "main": [
+        [
+          {
+            "node": "Send Welcome Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Welcome Email": {
+      "main": [
+        [
+          {
+            "node": "Gemini - Generate Reel Hooks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini - Generate Reel Hooks": {
+      "main": [
+        [
+          {
+            "node": "Extract Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Content": {
+      "main": [
+        [
+          {
+            "node": "Slack - New Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every Monday 9am": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Meta Ads Insights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Meta Ads Insights": {
+      "main": [
+        [
+          {
+            "node": "Gemini - Analyze & Strategy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini - Analyze & Strategy": {
+      "main": [
+        [
+          {
+            "node": "Extract Strategy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Strategy": {
+      "main": [
+        [
+          {
+            "node": "Save to Reports Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily 9 AM": {
+      "main": [
+        [
+          {
+            "node": "Search Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Config": {
+      "main": [
+        [
+          {
+            "node": "Google Places - Text Search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Place Details (Website + Phone)": {
+      "main": [
+        [
+          {
+            "node": "Format Place Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Place Data": {
+      "main": [
+        [
+          {
+            "node": "Hunter.io - Find Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hunter.io - Find Email": {
+      "main": [
+        [
+          {
+            "node": "Merge Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Email": {
+      "main": [
+        [
+          {
+            "node": "Append to Prospects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append to Prospects": {
+      "main": [
+        [
+          {
+            "node": "Slack - New Prospect",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Instagram Search (RapidAPI/Apify)": {
+      "main": [
+        [
+          {
+            "node": "Normalize API Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize API Response": {
+      "main": [
+        [
+          {
+            "node": "Filter Qualified",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Qualified": {
+      "main": [
+        [
+          {
+            "node": "Extract Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Email": {
+      "main": [
+        [
+          {
+            "node": "Append to Prospects1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Daily 9 AM1": {
+      "main": [
+        [
+          {
+            "node": "Search Config1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Config1": {
+      "main": [
+        [
+          {
+            "node": "Instagram Search (RapidAPI/Apify)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append to Prospects1": {
+      "main": [
+        [
+          {
+            "node": "Slack - New Prospect1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every Monday 9am1": {
+      "main": [
+        [
+          {
+            "node": "Config1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config1": {
+      "main": [
+        [
+          {
+            "node": "Meta Ads Insights1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Meta Ads Insights1": {
+      "main": [
+        [
+          {
+            "node": "Gemini - Analyze & Strategy1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini - Analyze & Strategy1": {
+      "main": [
+        [
+          {
+            "node": "Extract Strategy1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Strategy1": {
+      "main": [
+        [
+          {
+            "node": "Save to Reports Sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e4935507-ffeb-4fb9-8c57-3f856eb2c55e",
+  "meta": {
+    "instanceId": "9939f8cdfc376289322af8cd6698cbc3a1f73ff1274f7a5d4dae42d0400ce41d"
+  },
+  "id": "mHahClUHFQ8uh2mv",
+  "tags": []
+}
