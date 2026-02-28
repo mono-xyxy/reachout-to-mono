@@ -1122,7 +1122,7 @@
                     style="margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(79, 70, 229, 0.2); font-weight: 700; color: var(--text-heading); font-size: 16px;">
                     <i class="ph-fill ph-users"></i> Spots Claimed: <span id="client-countdown-display"
                         style="color: var(--accent); font-size: 20px;">...</span> <span
-                        style="opacity: 0.6; font-size: 14px;">/ 10</span>
+                        style="opacity: 0.6; font-size: 14px;">/ <span id="total-countdown-display">10</span></span>
                 </div>
             </div>
             <p
@@ -1267,7 +1267,7 @@
         <div
             style="margin-top: 25px; font-size: 16px; color: var(--text-body); max-width: 600px; margin-left: auto; margin-right: auto; text-align: center; background: white; padding: 25px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); border: 1px solid var(--border);">
             <p style="font-weight: 700; color: var(--text-heading); margin-bottom: 12px; font-size: 18px;">💳 Payment
-                Terms: $30 / ₹2,500 advance to be paid per client to book.</p>
+                Terms: $5 / ₹400 advance to be paid per client to book.</p>
             <p style="font-weight: 500;"><i class="ph-bold ph-shield-check"
                     style="color: var(--primary); margin-right: 5px; font-size: 20px; vertical-align: middle;"></i> Mono
                 supports and encourages digital currency features of India, so we go UPI too!</p>
@@ -1344,21 +1344,33 @@
         });
 
         // Fetch Admin Client Count
+        const localClients = localStorage.getItem('mono_clients');
+        const localTotal = localStorage.getItem('mono_total');
+
+        if (localClients) document.getElementById('client-countdown-display').innerText = localClients;
+        if (localTotal) document.getElementById('total-countdown-display').innerText = localTotal;
+
         fetch('admin.html')
             .then(response => response.text())
             .then(html => {
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 const countElement = doc.getElementById('successful-clients');
-                if (countElement) {
-                    document.getElementById('client-countdown-display').innerText = countElement.innerText;
-                } else {
+                const totalElement = doc.getElementById('total-clients');
+
+                if (countElement && !localClients) {
+                    document.getElementById('client-countdown-display').innerText = countElement.innerText.trim();
+                } else if (!localClients) {
                     document.getElementById('client-countdown-display').innerText = "0";
+                }
+
+                if (totalElement && !localTotal) {
+                    document.getElementById('total-countdown-display').innerText = totalElement.innerText.trim();
                 }
             })
             .catch(error => {
                 console.error('Error fetching admin count:', error);
-                document.getElementById('client-countdown-display').innerText = "0";
+                if (!localClients) document.getElementById('client-countdown-display').innerText = "0";
             });
     </script>
 </body>

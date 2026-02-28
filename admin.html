@@ -68,27 +68,62 @@
 <body>
 
     <div class="admin-card">
-        <h2>Mono Admin Dashboard</h2>
+        <h2>mono Admin Dashboard</h2>
         <p>This file acts as the database for the client count shown on the main landing page.</p>
 
         <div class="data-box">
             Successful Clients:
-            <!-- EDIT ONLY THE NUMBER BETWEEN THESE SPAN TAGS -->
-            <span id="successful-clients" class="count">2</span>
+            <!-- Click the number to edit -->
+            <span id="successful-clients" class="count" contenteditable="true"
+                style="border-bottom: 2px dashed #10B981; min-width: 50px; display: inline-block; cursor: text; outline: none;">2</span>
 
             <div style="margin-top: 20px; padding-top: 20px; border-top: 1px dashed #4F46E5;">
                 Total Spots Available:
-                <span id="total-clients" class="count" style="color: #475569;">10</span>
+                <span id="total-clients" class="count" contenteditable="true"
+                    style="color: #475569; border-bottom: 2px dashed #475569; min-width: 50px; display: inline-block; cursor: text; outline: none;">10</span>
             </div>
         </div>
 
-        <div class="instructions">
-            <strong>How to update:</strong><br>
-            1. Open `admin.html` in your code editor.<br>
-            2. Edit the numbers inside the <code>&lt;span&gt;</code> tags for clients and total spots.<br>
-            3. Save and push to GitHub. Main website will update automatically!
+        <button id="save-btn" onclick="saveData()"
+            style="margin-top: 25px; padding: 12px 24px; background: #4F46E5; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; font-family: 'Outfit', sans-serif; transition: 0.3s; width: 100%;">Save
+            Changes</button>
+
+        <div class="instructions"
+            style="background: rgba(245, 158, 11, 0.1); border: 1px dashed #F59E0B; margin-top: 25px;">
+            <strong>How it works:</strong><br>
+            Click the numbers above to edit them, then click "Save Changes". This updates the display immediately on
+            your device using your browser's local memory.<br><br>
+            <em>Note: Because this is a static site on Vercel, this updates the count for <b>you</b>. For a global admin
+                panel that updates for all visitors on the internet, we would need to connect a free database like
+                Firebase!</em>
         </div>
     </div>
+
+    <script>
+        function loadData() {
+            const clients = localStorage.getItem('mono_clients') || '2';
+            const total = localStorage.getItem('mono_total') || '10';
+            document.getElementById('successful-clients').innerText = clients;
+            document.getElementById('total-clients').innerText = total;
+        }
+
+        function saveData() {
+            const clients = document.getElementById('successful-clients').innerText.trim();
+            const total = document.getElementById('total-clients').innerText.trim();
+            localStorage.setItem('mono_clients', clients);
+            localStorage.setItem('mono_total', total);
+
+            const btn = document.getElementById('save-btn');
+            btn.innerText = 'Saved Successfully!';
+            btn.style.background = '#10B981';
+            setTimeout(() => {
+                btn.innerText = 'Save Changes';
+                btn.style.background = '#4F46E5';
+            }, 2000);
+        }
+
+        loadData();
+    </script>
 
 </body>
 
